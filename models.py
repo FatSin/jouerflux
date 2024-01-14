@@ -1,12 +1,10 @@
-# blablaaaaaaaaaaa
+""" Definitions for our database models """
+
 
 from enum import Enum
 
-# from flask import current_app
-# from flask_sqlalchemy import SQLAlchemy
 from app import db, flask_app
 
-# db = SQLAlchemy(flask_app)
 
 class OperStatus(Enum):
     active = "active"
@@ -57,9 +55,7 @@ class Firewall(db.Model):
                  }
 
 
-# On voit bien qu'il y a de la refacto possible pour merger les 2 types de node (firewalls et managers)
-# Par exemple, on peut ajouter un booléen 'manager' à la classe Firewall, ainsi gateways et managers
-# seront de type Firewall
+# TODO
 class Manager(db.Model):
     __tablename__ = 'manager'
     __table_args__ = {'extend_existing': True}
@@ -156,15 +152,15 @@ class Host(db.Model):
 
 import os
 if os.environ.get('INIT_DB', None):
-   print('Init db...')
-   with flask_app.app_context():
-       try:
+    print('Init db...')
+    with flask_app.app_context():
+        try:
             db.drop_all()
             db.create_all()
-            host1 = Host(host_id = 1,
-                            host_uuid = "100e4567-e89b-12d3-a456-426655440010",
-                            subnet = "10.0.0.10",
-                            mask = "255.255.255.255"
+            host1 = Host(host_id=1,
+                         host_uuid="100e4567-e89b-12d3-a456-426655440010",
+                         subnet="10.0.0.10",
+                         mask="255.255.255.255"
             )
             host2 = Host(host_id=2,
                          host_uuid="200e4567-e89b-12d3-a456-426655440020",
@@ -173,7 +169,7 @@ if os.environ.get('INIT_DB', None):
                          )
             db.session.add_all([host1, host2])
             db.session.commit()
-       except Exception as e:
+        except Exception as e:
            print('failed')
            print(e)
-       print('...DB initiated')
+        print('...DB initiated')

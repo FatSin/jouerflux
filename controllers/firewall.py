@@ -1,4 +1,4 @@
-# blablaaaaaaaaaa
+""" DB context and methods to display/add/modify firewalls """
 
 from typing import Dict, List
 
@@ -141,7 +141,6 @@ class FirewallContext:
 firewall_context = FirewallContext()
 
 def get_firewalls():
-    #breakpoint()
     return firewall_context.get_firewalls()
 
 

@@ -1,7 +1,8 @@
-# blablaaaaaaaaaa
+""" DB context and methods to display/add/modify policies """
 
 from typing import Dict, List
 from datetime import datetime
+
 from app import db
 from models import Policy, Firewall
 from exceptions import DatabaseError, IntegrityError, NotFoundInDB, GenericError
@@ -32,7 +33,7 @@ class PolicyContext:
             res = [ pol.as_dict() for pol in policies] if policies else policies
             return res
         except Exception as e:
-            raise DatabaseError(f"Counldn't fetch policies from the DB. {e}")
+            raise DatabaseError(f"Couldn't fetch policies from the DB. {e}")
 
     def add_policy(self, policy: dict):
 

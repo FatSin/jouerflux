@@ -1,7 +1,5 @@
-# Blaaaaaaaaaaaaaaaaaaaaaaaaa
+""" Flask application initialization """
 
-from flask import Flask
-import os
 
 import connexion
 from flask_sqlalchemy import SQLAlchemy
@@ -30,10 +28,6 @@ flask_app.config['SQLALCHEMY_DATABASE_URI'] = r'sqlite:///jouerflux.db'
 flask_app.config['ENV'] = 'production'
 
 db = SQLAlchemy(flask_app)
-
-# print(db)
-# print(id(db))
-# breakpoint()
 
 
 if __name__ == '__main__':

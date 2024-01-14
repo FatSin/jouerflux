@@ -1,7 +1,8 @@
-# blablaaaaaaaaaa
+""" DB context and methods to display/add/modify rules """
 
 from typing import Dict, List
 from app import db
+
 from models import Rule, Policy, Host
 from exceptions import DatabaseError, IntegrityError, NotFoundInDB, GenericError
 
@@ -30,7 +31,7 @@ class RuleContext:
             res = policy.as_dict()["rules"]
             return res
         except Exception as e:
-            raise DatabaseError(f"Counldn't fetch policies from the DB. {e}")
+            raise DatabaseError(f"Couldn't fetch policies from the DB. {e}")
 
     def add_policy_rule(self, pol_uuid: str, rule: dict):
 
@@ -60,12 +61,12 @@ class RuleContext:
             rules_ids = sorted([rule.rule_id for rule in rules])
             new_id = rules_ids[-1] + 1 if rules_ids else 1
             rule = Rule(rule_id=new_id,
-                            rule_uuid=rule_uuid,
-                            action=action,
-                            service=service,
-                            fk_source=source.host_id,
-                            fk_dest=dest.host_id,
-                            fk_policy=policy.policy_id)
+                        rule_uuid=rule_uuid,
+                        action=action,
+                        service=service,
+                        fk_source=source.host_id,
+                        fk_dest=dest.host_id,
+                        fk_policy=policy.policy_id)
 
             self.session.add(rule)
             self.session.commit()

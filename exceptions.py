@@ -1,4 +1,4 @@
-# blaaaaaaa
+""" Custom error handlers """
 
 from connexion.problem import problem
 
