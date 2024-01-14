@@ -1,0 +1,707 @@
+openapi: 3.0.3
+info:
+  title: Swagger jouerFlux - OpenAPI 3.0
+  description: |-
+    Blabla
+  version: 0.1.0
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+  - url: "/api"
+tags:
+  - name: firewall
+    description: Actions on firewalls
+  - name: policy
+    description: Actions on policies
+  - name: rule
+    description: Actions on rules
+
+
+paths:
+  /firewall/{uuid}:
+    get:
+      tags:
+        - firewall
+      summary: Find firewall by UUID
+      description: Returns a single firewall
+      operationId: controllers.firewall.get_firewall
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of firewall to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firewall'
+        '400':
+          description: Invalid UUID supplied
+        '404':
+          description: Firewall not found
+    delete:
+        tags:
+          - firewall
+        summary: Delete an existing firewall
+        description: Delete an existing firewall by UUID
+        operationId: controllers.firewall.delete_firewall
+        parameters:
+          - name: uuid
+            in: path
+            description: UUID of firewall to return
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Firewall'
+          '400':
+            description: Invalid UUID supplied
+          '404':
+            description: Firewall not found
+#        security:
+#          - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+  /firewall:
+    get:
+      tags:
+        - firewall
+      summary: Get firewalls
+      description: Returns a all firewalls
+      operationId: controllers.firewall.get_firewalls
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Firewall'
+
+    post:
+      tags:
+        - firewall
+      summary: Add a new firewall
+      description: Add a new firewall
+      operationId: controllers.firewall.add_firewall
+      requestBody:
+        x-body-name: 'firewall'
+        description: Create a new firewall in the DB
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Firewall'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firewall'
+        '400':
+          description: Invalid input
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+    put:
+      tags:
+        - firewall
+      summary: Update an existing firewall
+      description: Update an existing firewall
+      operationId: controllers.firewall.update_firewall
+      requestBody:
+        x-body-name: 'firewall'
+        description: Update an existing firewall
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Firewall'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Firewall'
+        '400':
+          description: Invalid UUID supplied
+        '404':
+          description: Firewall not found
+        '405':
+          description: Validation exception
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+
+  /policy/{uuid}:
+    get:
+      tags:
+        - policy
+      summary: Find policy by UUID
+      description: Returns a single policy
+      operationId: controllers.policy.get_policy
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of policy to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Invalid UUID supplied
+        '404':
+          description: Policy not found
+    delete:
+        tags:
+          - policy
+        summary: Delete an existing policy
+        description: Delete an existing policy by UUID
+        operationId: controllers.policy.delete_policy
+        parameters:
+          - name: uuid
+            in: path
+            description: UUID of policy to return
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Policy'
+          '400':
+            description: Invalid UUID supplied
+          '404':
+            description: Policy not found
+#        security:
+#          - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+  /policy:
+    get:
+      tags:
+        - policy
+      summary: Get all policies
+      description: Returns a all policies
+      operationId: controllers.policy.get_policies
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+    post:
+      tags:
+        - policy
+      summary: Add a new policy
+      description: Add a new policy
+      operationId: controllers.policy.add_policy
+      requestBody:
+        x-body-name: 'policy'
+        description: Create a new policy in the DB
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicySummary'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Invalid input
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+    patch:
+      tags:
+        - policy
+      summary: Push a policy on firewalls
+      description: Push a policy on firewalls
+      operationId: controllers.policy.push_policy_firewalls
+      requestBody:
+        x-body-name: 'push'
+        description: Push a policy on firewalls, given the policy UUID and a list of firewall UUIDs
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyPush'
+        required: true
+#      parameters:
+#        - name: policy_uuid
+#          in: query
+#          description: UUID of policy to push
+#          required: true
+#          schema:
+#            type: string
+#        - name: firewall_uuid
+#          in: query
+#          description: UUID of firewall to push on
+#          required: true
+#          schema:
+#            type: array
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Invalid input
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+#   put:
+#      tags:
+#        - policy
+#      summary: Update a policy and push to firewalls
+#      description: Update an existing policy
+#      operationId: controllers.policy.update_policy
+#      requestBody:
+#        x-body-name: 'policy'
+#        description: Update an existing policy
+#        content:
+#          application/json:
+#            schema:
+#              $ref: '#/components/schemas/Policy'
+#        required: true
+#      responses:
+#        '200':
+#          description: Successful operation
+#          content:
+#            application/json:
+#              schema:
+#                $ref: '#/components/schemas/Policy'
+#        '400':
+#          description: Invalid UUID supplied
+#        '404':
+#          description: Policy not found
+#        '405':
+#          description: Validation exception
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+
+  /rule/{uuid}:
+    get:
+      tags:
+        - rule
+      summary: Find rule by UUID
+      description: Returns a single rule
+      operationId: controllers.rule.get_rule
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of rule to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        '400':
+          description: Invalid UUID supplied
+        '404':
+          description: Rule not found
+    delete:
+        tags:
+          - rule
+        summary: Delete an existing rule
+        description: Delete an existing rule by UUID
+        operationId: controllers.rule.delete_rule
+        parameters:
+          - name: uuid
+            in: path
+            description: UUID of rule to return
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Rule'
+          '400':
+            description: Invalid UUID supplied
+          '404':
+            description: Rule not found
+#        security:
+#          - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+  /rule:
+    put:
+      tags:
+        - rule
+      summary: Modify a rule
+      description: Modify a rule
+      operationId: controllers.rule.update_rule
+      requestBody:
+        x-body-name: 'push'
+        description: Modify a rule with given UUID
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleSummary'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Rule'
+        '400':
+          description: Invalid input
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+
+  /rule/policy/{uuid}:
+    get:
+      tags:
+        - rule
+      summary: Get all rules from a policy
+      description: Returns a all rules from a policy
+      operationId: controllers.rule.get_policy_rules
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of the policy to display
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Rule'
+
+    post:
+      tags:
+        - rule
+      summary: Add a new rule to a policy
+      description: Add a new rule to a policy
+      operationId: controllers.rule.add_policy_rule
+      parameters:
+        - name: uuid
+          in: path
+          description: UUID of policy to modify
+          required: true
+          schema:
+            type: string
+      requestBody:
+        x-body-name: 'rule'
+        description: Create a new rule in the DB
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RuleSummary'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '400':
+          description: Invalid input
+#      security:
+#        - jouerFlux_auth:
+#            - write:flux
+#            - read:flux
+
+
+components:
+  schemas:
+    Firewall:
+      required:
+        - uuid
+        - hostname
+        - ipAddress
+        - zone
+        - operStatus
+        - billingStatus
+        - clusterInfo
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 123e4567-e89b-12d3-a456-426655440000
+        hostname:
+          type: string
+          example: FW_DMZ_INTERNET_150
+        ipAddress:
+          type: string
+          example: 192.168.2.10
+        manager:
+          type: string
+          example: MG_DMZ_INTERNET
+        zone:
+          type: string
+          example: DMZ_INTERNET
+        operStatus:
+          type: string
+          enum:
+            - active
+            - unactive
+            - error
+        billingStatus:
+          type: string
+          enum:
+            - active
+            - decommisioned
+        clusterInfo:
+          type: string
+          enum:
+            - standalone
+            - ha
+    PolicySummary:
+      required:
+        - uuid
+        - name
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 456e4567-e89b-12d3-a456-426655440001
+        name:
+          type: string
+          example: POL_INTERNET_SEC
+    Policy:
+      required:
+        - uuid
+        - name
+        - lastModificationDate
+        - version
+        - deployedOn
+        - rules
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 456e4567-e89b-12d3-a456-426655440001
+        name:
+          type: string
+          example: POL_INTERNET_SEC
+        lastModificationDate:
+          type: string
+          format: date-time
+          example: "2024-01-14T11:42:31.423166"
+        version:
+          type: integer
+          example: 235
+        deployedOn:
+          type: array
+          items:
+            type: string
+        rules:
+          type: array
+          items:
+            type: string
+    RuleSummary:
+      required:
+        - uuid
+        - action
+        - source
+        - destination
+        - service
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 789e4567-e89b-12d3-a456-426655440001
+        action:
+          type: string
+          enum:
+            - accept
+            - deny
+            - inspect
+        source:
+          type: string
+          example: 100e4567-e89b-12d3-a456-426655440010
+        destination:
+          type: string
+          example: 200e4567-e89b-12d3-a456-426655440020
+        service:
+          type: string
+          example: http
+    Rule:
+      required:
+        - uuid
+        - action
+        - source
+        - destination
+        - service
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: 789e4567-e89b-12d3-a456-426655440002
+        action:
+          type: string
+          enum:
+            - accept
+            - deny
+            - inspect
+        source:
+          type: object
+          properties: {
+            "uuid": {
+              type: string,
+              example: 00000001-e89b-12d3-a456-426655440001
+            },
+            "ipAddress": {
+              type: string,
+              example: 10.0.0.2
+            },
+            "mask": {
+              type: string,
+              example: 255.255.255.255
+            }
+
+          }
+        destination:
+          type: object
+          properties: {
+            "uuid": {
+              type: string,
+              example: 00000002-e89b-12d3-a456-426655440001
+            },
+            "ipAddress": {
+              type: string,
+              example: 10.0.5.2
+            },
+            "mask": {
+              type: string,
+              example: 255.255.255.255
+            }
+          }
+        service:
+          type: string
+          example: http
+    PolicyPush:
+      required:
+        - policy_Uuid
+        - firewall_Uuids
+      type: object
+      properties:
+        policy_Uuid:
+          type: string
+          example: 456e4567-e89b-12d3-a456-426655440001
+        firewall_Uuids:
+          type: array
+          items:
+            type: string
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+      xml:
+        name: '##default'
+  requestBodies:
+    Firewall:
+      description: Firewall that needs to be added to the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Firewall'
+    Policy:
+      description: Policy that needs to be added to the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PolicySummary'
+    Rule:
+      description: Rule that needs to be added to the database
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RuleSummary'
+#    FirewallArray:
+#      description: List of firewalls
+#      content:
+#        application/json:
+#          schema:
+#            type: array
+#            items:
+#              $ref: '#/components/schemas/Firewall'
+#    PolicyArray:
+#      description: List of policies
+#      content:
+#        application/json:
+#          schema:
+#            type: array
+#            items:
+#              $ref: '#/components/schemas/Policy'
+  securitySchemes:
+    jouerFlux_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://jouerFlux.swagger.io/oauth/authorize
+          scopes:
+            write:flux: modification rights
+            read:flux: read rights
+    api_key:
+      type: apiKey
+      name: api_key
+      in: header
